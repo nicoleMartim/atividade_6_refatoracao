@@ -20,14 +20,14 @@ function duracao(param_segundos) {
   return minutos + ":" + segundos;
 }
 
-function f3(lista, n) {
-  var resultado = null;
+function buscarMusica(lista, musicaDeBusca) {
+  var musicaEncontrada = null;
   for (var i = 0; i < lista.length; i++) {
-    if (lista[i].nome == n) {
-      resultado = lista[i];
+    if (lista[i].nome == musicaDeBusca) {
+      musicaEncontrada = lista[i];
     }
   }
-  return resultado;
+  return musicaEncontrada;
 }
 
 function testarVolume(volume) {
@@ -102,12 +102,12 @@ function ordenarEExibir(lista) {
   return cp;
 }
 
-function f11(lista, p1, p2) {
-  if (p1 < 0 || p1 >= lista.length) return;
-  if (p2 < 0 || p2 >= lista.length) return;
-  var tmp = lista[p1];
-  lista[p1] = lista[p2];
-  lista[p2] = tmp;
+function mudarOrdem(lista, posicao1, posicao2) {
+  if (posicao1 < 0 || posicao1 >= lista.length) return;
+  if (posicao2 < 0 || posicao2 >= lista.length) return;
+  var auxiliar = lista[posicao1];
+  lista[posicao1] = lista[posicao2];
+  lista[posicao2] = auxiliar;
 }
 
 function duracao(lista, lim) {
