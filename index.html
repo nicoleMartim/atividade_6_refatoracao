@@ -64,35 +64,35 @@
                     <span class="numero">1.</span>
                     <span class="info-musica">—</span>
                     <div class="acoes-item">
-                        <button class="btn-fav" onclick="f6(0); mostra()">★</button>
+                        <button class="btn-fav" onclick="favorita(0); mostra()">★</button>
                     </div>
                 </li>
                 <li class="item-musica" id="musica1">
                     <span class="numero">2.</span>
                     <span class="info-musica">—</span>
                     <div class="acoes-item">
-                        <button class="btn-fav" onclick="f6(1); mostra()">★</button>
+                        <button class="btn-fav" onclick="favorita(1); mostra()">★</button>
                     </div>
                 </li>
                 <li class="item-musica" id="musica2">
                     <span class="numero">3.</span>
                     <span class="info-musica">—</span>
                     <div class="acoes-item">
-                        <button class="btn-fav" onclick="f6(2); mostra()">★</button>
+                        <button class="btn-fav" onclick="favorita(2); mostra()">★</button>
                     </div>
                 </li>
                 <li class="item-musica" id="musica3">
                     <span class="numero">4.</span>
                     <span class="info-musica">—</span>
                     <div class="acoes-item">
-                        <button class="btn-fav" onclick="f6(3); mostra()">★</button>
+                        <button class="btn-fav" onclick="favorita(3); mostra()">★</button>
                     </div>
                 </li>
                 <li class="item-musica" id="musica4">
                     <span class="numero">5.</span>
                     <span class="info-musica">—</span>
                     <div class="acoes-item">
-                        <button class="btn-fav" onclick="f6(4); mostra()">★</button>
+                        <button class="btn-fav" onclick="favorita(4); mostra()">★</button>
                     </div>
                 </li>
             </ul>
@@ -137,9 +137,9 @@
 
         // Atualiza os contadores no rodapé da lista
         function atualizarRodape() {
-            document.getElementById("info-total").innerHTML = a.length + " músicas";
-            document.getElementById("info-duracao").innerHTML = "Duração total: " + f2(f5(a));
-            document.getElementById("info-favoritas").innerHTML = f9(a) + " favoritas";
+            document.getElementById("info-total").innerHTML = listarMusica.length + " músicas";
+            document.getElementById("info-duracao").innerHTML = "Duração total: " + duracao(duracaosegundos(a));
+            document.getElementById("info-favoritas").innerHTML = atualizarRodape(listarMusica) + " favoritas";
         }
 
         // Lê os campos do formulário e chama add()
@@ -147,15 +147,15 @@
             var nome = document.getElementById("input-nome").value.trim();
             var artista = document.getElementById("input-artista").value.trim();
             var genero = document.getElementById("input-genero").value.trim();
-            var min = parseInt(document.getElementById("input-min").value) || 0;
-            var seg = parseInt(document.getElementById("input-seg").value) || 0;
+            var minutos = parseInt(document.getElementById("input-min").value) || 0;
+            var segundos = parseInt(document.getElementById("input-seg").value) || 0;
 
             if (!nome || !artista || !genero) {
                 alert("Preencha nome, artista e gênero.");
                 return;
             }
 
-            add(nome, artista, genero, min, seg);
+            adicionarDaInterface(nome, artista, genero, minurtos, segundos);
 
             var lista = document.getElementById("lista-musicas");
             var idx = a.length - 1;
@@ -178,14 +178,14 @@
             document.getElementById("input-nome").value = "";
             document.getElementById("input-artista").value = "";
             document.getElementById("input-genero").value = "";
-            document.getElementById("input-min").value = "";
-            document.getElementById("input-seg").value = "";
+            document.getElementById("input-minutos").value = "";
+            document.getElementById("input-segundos").value = "";
         }
 
         // Ordena e exibe a playlist em ordem alfabética
         function ordenarEExibir() {
-            var ordenada = f10(a);
-            a = ordenada;
+            var ordenada = ordenarEExibir(a);
+            listarMusica = ordenada;
             mostra();
         }
 
@@ -193,7 +193,7 @@
         function filtrarArtista() {
             var valor = document.getElementById("input-filtro-artista").value.trim();
             if (!valor) return;
-            var resultado = f7(a, valor);
+            var resultado = filtrarArtista(listarMusica, valor);
             alert("Músicas de " + valor + ": " + resultado.length + " encontrada(s).\nVeja o console para detalhes.");
             console.log("Filtro artista:", resultado);
         }
@@ -202,7 +202,7 @@
         function filtrarGenero() {
             var valor = document.getElementById("input-filtro-genero").value.trim();
             if (!valor) return;
-            var resultado = f8(a, valor);
+            var resultado = filtrarGenero(listarMusica, valor);
             alert("Músicas do genero " + valor + ": " + resultado.length + " encontrada(s).\nVeja o console para detalhes.");
             console.log("Filtro gênero:", resultado);
         }
@@ -218,7 +218,7 @@
         function testarVolume() {
             var entrada = document.getElementById("input-volume").value;
             var valor = isNaN(entrada) ? entrada : Number(entrada);
-            var valido = f4(valor);
+            var valido = testarVolume(valor);
             var span = document.getElementById("resultado-volume");
             span.textContent = valido ? "✅ Volume válido" : "❌ Volume inválido";
             span.className = valido ? "valido" : "invalido";
