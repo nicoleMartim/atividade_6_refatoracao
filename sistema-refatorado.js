@@ -13,7 +13,7 @@ function tempoEmSegundos(minutos, segundos) {
 
 function duracao(param_segundos) {
   var minutos = Math.floor(param_segundos / 60);
-  var segundos  = param_segundos % 60;
+  var segundos = param_segundos % 60;
   if (segundos < 10) {
     return minutos + ":0" + segundos;
   }
@@ -33,8 +33,8 @@ function buscarMusica(lista, musicaDeBusca) {
 function testarVolume(volume) {
   if (volume === null) return false;
   if (typeof volume !== "number") return false;
-  if ( volume < 0) return false;
-  if ( volume > 100) return false;
+  if (volume < 0) return false;
+  if (volume > 100) return false;
 
   return true;
 }
@@ -124,7 +124,7 @@ function adicionarDaInterface(nome, artista, genero, minutos, segundos) {
 }
 
 function mostra() {
-  for (let i= 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     document.getElementById("musica" + i).innerHTML =
       playlist[i].nome + " - " +
       playlist[i].artista +
@@ -140,25 +140,14 @@ function gerarEExibirRelatorio() {
   relatorio = relatorio + "Favoritas: " + atualizarRodape(listarMusica) + "\n";
   relatorio = relatorio + "Duracao total: " + duracao(duracaoSegundos(listarMusica)) + "\n";
   relatorio = relatorio + "\n";
-  for (var i = 0; i < listarMusica.length; i++) {
-    var favorita = "";
-    if (listarMusica[i].favorita == true) {
-      favorita = " [FAVORITA]";
+  for (var i = 0; i < playlist.length; i++) {
+    var favorito = ""
+    if (playlist[i].favorito == true) {
+      favorito = " [FAVORITA]"
     }
-    relatorio =
-      relatorio +
-      (i + 1) +
-      ". " +
-      listarMusica[i].nome +
-      " - " +
-      listarMusica[i].artista +
-      " (" +
-      duracao(listarMusica[i].duracao) +
-      ")" +
-      favorita +
-      "\n";
+    texto = texto + (i + 1) + ". " + playlist[i].nome + " - " + playlist[i].artista + " (" + calcularDuracao(playlist[i].duracao) + ")" + favorito + "\n"
   }
-  antes = relatorio;
-  console.log(relatorio);
-  return relatorio;
+  relatorioFinal = texto
+  console.log(texto)
+  return texto
 }
