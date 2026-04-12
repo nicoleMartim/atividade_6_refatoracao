@@ -4,7 +4,7 @@
 var listarMusica = [];
 var b = 0;
 var c = false;
-var d = "";
+var antes = "";
 
 function tempoEmSegundos(minutos, segundos) {
   var resultado = minutos * 60 + segundos;
@@ -12,7 +12,7 @@ function tempoEmSegundos(minutos, segundos) {
 }
 
 function duracao(param_segundos) {
-  var minutos = Math.floor(segundos / 60);
+  var minutos = Math.floor(param_segundos / 60);
   var segundos  = param_segundos % 60;
   if (segundos < 10) {
     return minutos + ":0" + segundos;
@@ -31,75 +31,68 @@ function buscarMusica(lista, musicaDeBusca) {
 }
 
 function testarVolume(volume) {
-  if (volume != null) {
-    if (volume >= 0) {
-      if (volume <= 100) {
-        if (typeof volume === "number") {
-          return true;
-        }
-      }
-    }
-  }
-  return false;
+  if (volume === null) return false;
+  if (typeof volume !== "number") return false;
+  if ( volume < 0) return false;
+  if ( volume > 100) return false;
+
+  return true;
 }
 
 function duracaoSegundos(lista) {
-  var tempo = 0;
-  for (var i = 0; i < lista.length; i++) {
-    tempo = tempo + lista[i].duracao;
+  var duracaoTotal = 0;
+  for (let i = 0; i < playlist.length; i++) {
+    duracaoTotal += playlist[i].duracao;
   }
-  b = tempo;
-  return tempo;
+
+  return duracaoTotal;
 }
 
 function favorita(i) {
-  if (i >= 0 && i < listarMusica.length) {
-    if (listarMusica[i].favorita == false) {
-      listarMusica[i].favorita = true;
-    } else {
-      listarMusica[i].favorita = false;
-    }
-  }
+  if (i < 0 || i >= playlist.length) return;
+
+  playlist[i].favorito = !playlist[i].favorito;
 }
 
-function filtrarArtista(lista, p) {
-  var r = [];
+
+function filtrarArtista(lista, procurarArtista) {
+  var resultado = [];
   for (var i = 0; i < lista.length; i++) {
-    if (lista[i].artista == p) {
-      r.push(lista[i]);
+    if (lista[i].artista == procurarArtista) {
+      resultado.push(lista[i]);
     }
   }
-  return r;
+  return resultado;
 }
 
 function filtrarGenero(lista, genero) {
-  var r = [];
+  var resultado = [];
   for (var i = 0; i < lista.length; i++) {
     if (lista[i].genero == genero) {
-      r.push(lista[i]);
+      resultado.push(lista[i]);
     }
   }
-  return r;
+  return resultado;
 }
 
 function atualizarRodape(lista) {
-  var ct = 0;
+  var totaisFavoritas = 0;
   for (var i = 0; i < lista.length; i++) {
     if (lista[i].favorita == true) {
-      ct = ct + 1;
+      totaisFavoritas = totaisFavoritas + 1;
     }
   }
-  return ct;
+  return totaisFavoritas;
 }
 
 function ordenarEExibir(lista) {
-  var cp = lista.slice();
-  cp.sort(function (x, y) {
-    if (x.nome < y.nome) return -1;
-    if (x.nome > y.nome) return 1;
+  var copiaPlaylist = lista.slice();
+  cp.sort(function (musica1, musica2) {
+    if (musica1.nome < musica2.nome) return -1;
+    if (musica1.nome > musica2.nome) return 1;
     return 0;
   });
-  return cp;
+  return copiaPlaylist;
 }
 
 function mudarOrdem(lista, posicao1, posicao2) {
@@ -110,53 +103,50 @@ function mudarOrdem(lista, posicao1, posicao2) {
   lista[posicao2] = auxiliar;
 }
 
-function duracao(lista, lim) {
-  var r = [];
+function duracao(lista, limite) {
+  var musicaEncontrada = [];
   for (var i = 0; i < lista.length; i++) {
-    if (lista[i].duracao <= lim) {
-      r.push(lista[i]);
+    if (lista[i].duracao <= limite) {
+      musicaEncontrada.push(lista[i]);
     }
   }
-  return r;
+  return musicaEncontrada;
 }
 
 function adicionarDaInterface(nome, artista, genero, minutos, segundos) {
-  var obj = {};
-  obj.nome = nome;
-  obj.artista = artista;
-  obj.genero = genero;
-  obj.duracao = tempoEmSegundos(minutos, segundos);
-  obj.fav = false;
-  listarMusica.push(obj);
+  var musica = {};
+  musica.nome = nome;
+  musica.artista = artista;
+  musica.genero = genero;
+  musica.duracao = tempoEmSegundos(minutos, segundos);
+  musica.fav = false;
+  listarMusica.push(musica);
 }
 
 function mostra() {
-  document.getElementById("musica0").innerHTML =
-    listarMusica[0].nome + " - " + listarMusica[0].artista + " (" + duracao(listarMusica[0].duracao) + ")";
-  document.getElementById("musica1").innerHTML =
-    listarMusica[1].nome + " - " + listarMusica[1].artista + " (" + duracao(listarMusica[1].duracao) + ")";
-  document.getElementById("musica2").innerHTML =
-    listarMusica[2].nome + " - " + listarMusica[2].artista + " (" + duracao(listarMusica[2].duracao) + ")";
-  document.getElementById("musica3").innerHTML =
-    listarMusica[3].nome + " - " + listarMusica[3].artista + " (" + duracao(listarMusica[3].duracao) + ")";
-  document.getElementById("musica4").innerHTML =
-    listarMusica[4].nome + " - " + listarMusica[4].artista + " (" + duracao(listarMusica[4].duracao) + ")";
+  for (let i= 0; i < 5; i++) {
+    document.getElementById("musica" + i).innerHTML =
+      playlist[i].nome + " - " +
+      playlist[i].artista +
+      " (" + formatarDuracao(playlist[i].duracao) + ")";
+  }
 }
 
+// essa eu não entendi como refatorar
 function gerarEExibirRelatorio() {
-  var s = "";
-  s = s + "=== RELATORIO DA PLAYLIST ===\n";
-  s = s + "Total de musicas: " + listarMusica.length + "\n";
-  s = s + "Favoritas: " + atualizarRodape(listarMusica) + "\n";
-  s = s + "Duracao total: " + duracao(duracaoSegundos(listarMusica)) + "\n";
-  s = s + "\n";
+  var relatorio = "";
+  relatorio = relatorio + "=== RELATORIO DA PLAYLIST ===\n";
+  relatorio = relatorio + "Total de musicas: " + listarMusica.length + "\n";
+  relatorio = relatorio + "Favoritas: " + atualizarRodape(listarMusica) + "\n";
+  relatorio = relatorio + "Duracao total: " + duracao(duracaoSegundos(listarMusica)) + "\n";
+  relatorio = relatorio + "\n";
   for (var i = 0; i < listarMusica.length; i++) {
     var favorita = "";
     if (listarMusica[i].favorita == true) {
       favorita = " [FAVORITA]";
     }
-    s =
-      s +
+    relatorio =
+      relatorio +
       (i + 1) +
       ". " +
       listarMusica[i].nome +
@@ -168,7 +158,7 @@ function gerarEExibirRelatorio() {
       favorita +
       "\n";
   }
-  d = s;
-  console.log(s);
-  return s;
+  antes = relatorio;
+  console.log(relatorio);
+  return relatorio;
 }
